@@ -23,6 +23,8 @@ import kotlin.math.roundToInt
 class GogglesListener(private val plugin: JavaPlugin) : Listener {
 
     private val runnableMap = HashMap<UUID, BukkitRunnable>()
+    private val FARMERS_GOGGLES = "FARMERS_GOGGLES"
+    private val TASK_PERIOD = 2L
 
     @EventHandler
     fun onArmorChange(event: PlayerArmorChangeEvent) {
@@ -38,13 +40,15 @@ class GogglesListener(private val plugin: JavaPlugin) : Listener {
     }
 
     private fun isGogglesItem(item: ItemStack?): Boolean {
-        return item?.itemMeta?.persistentDataContainer?.get(itemIDKey!!, PersistentDataType.STRING) == "FARMERS_GOGGLES"
+        return item?.itemMeta?.persistentDataContainer?.get(itemIDKey!!, PersistentDataType.STRING) == FARMERS_GOGGLES
     }
 
     private fun stopGogglesRunnable(player: Player) {
         runnableMap[player.uniqueId]?.cancel()
         runnableMap.remove(player.uniqueId)
-        player.persistentDataContainer[gogglesStandKey!!, UUIDDataType()]?.let { Bukkit.getEntity(it) }?.remove()
+        player.persistentDataContainer[gogglesStandKey!!, UUIDDataType()]?.let { uuid ->
+            Bukkit.getEntity(uuid)?.remove()
+        }
     }
 
     private fun startGogglesRunnable(player: Player) {
@@ -53,13 +57,16 @@ class GogglesListener(private val plugin: JavaPlugin) : Listener {
             private var currentCrop: Block? = null
 
             override fun run() {
-                val targetBlock = player.getTargetBlockExact(5) ?: return
-
-                if (targetBlock != currentCrop) {
+                val targetBlock = player.getTargetBlockExact(5)
+                if (targetBlock == null) {
+                    textStand?.remove()
+                    currentCrop = null
+                    player.persistentDataContainer.remove(gogglesStandKey!!)
+                    return
+                } else if (targetBlock != currentCrop) {
                     textStand?.remove()
                     currentCrop = targetBlock
-                    if (targetBlock.blockData is Ageable) {
-                        val cropData = targetBlock.blockData as Ageable
+                    (targetBlock.blockData as? Ageable)?.let { cropData ->
                         val progress = ((cropData.age.toDouble() / cropData.maximumAge) * 100).roundToInt()
                         val progressText = if (progress == 100) "§aMature" else "§r$progress%"
                         val finalLocation = targetBlock.location.add(0.5, 0.75, 0.5)
@@ -71,12 +78,12 @@ class GogglesListener(private val plugin: JavaPlugin) : Listener {
             }
         }
 
-        gogglesRunnable.runTaskTimer(plugin, 0, 2)
+        gogglesRunnable.runTaskTimer(plugin, 0, TASK_PERIOD)
         runnableMap[player.uniqueId] = gogglesRunnable
     }
 
     private fun createArmorStand(location: Location, text: String): ArmorStand {
-        val armorStand = location.world.spawn(location, ArmorStand::class.java) { stand ->
+        return location.world.spawn(location, ArmorStand::class.java) { stand ->
             stand.isVisible = false
             stand.isMarker = true
             stand.customName = text
@@ -84,6 +91,5 @@ class GogglesListener(private val plugin: JavaPlugin) : Listener {
             stand.isCustomNameVisible = true
             stand.isVisibleByDefault = false
         }
-        return armorStand
     }
 }

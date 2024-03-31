@@ -2,3 +2,11 @@ name: Farmageddon
 version: '${project.version}'
 main: ksndq.farmageddon.Farmageddon
 api-version: '1.20'
+commands:
+  cenchant:
+    description: Enchant the item in your hand with a custom enchant
+    usage: /<command> <enchant> <level>
+    aliases:
+      - customenchant
+      - enchantc
+      - cench

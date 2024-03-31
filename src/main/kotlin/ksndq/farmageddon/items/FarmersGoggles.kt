@@ -21,29 +21,29 @@ object FarmersGoggles {
     private const val ITEM_ID = "FARMERS_GOGGLES"
     fun getItem(): ItemStack {
         val item = ItemStack(Material.LEATHER_HELMET)
-        val itemMeta = item.itemMeta
-        itemMeta.isUnbreakable = true
-        itemMeta.addItemFlags(
+        val leatherMeta = item.itemMeta as LeatherArmorMeta
+        leatherMeta.isUnbreakable = true
+        leatherMeta.addItemFlags(
             ItemFlag.HIDE_ENCHANTS,
             ItemFlag.HIDE_ATTRIBUTES,
             ItemFlag.HIDE_UNBREAKABLE,
             ItemFlag.HIDE_DYE
         )
-        itemMeta.displayName(Component.text().content("Farmer's Goggles").color(TextColor.color(0xdcba64)).build())
+        leatherMeta.displayName(Component.text().content("Farmer's Goggles").color(TextColor.color(0xdcba64)).build())
 
+        val modifierUUID = UUID.randomUUID()
         val modifier = AttributeModifier(
-            UUID.randomUUID(),
+            modifierUUID,
             "Base Armor Reduction",
             -1.0,
             AttributeModifier.Operation.ADD_SCALAR,
             EquipmentSlot.HEAD
         )
-        itemMeta.addAttributeModifier(Attribute.GENERIC_ARMOR, modifier)
+        leatherMeta.addAttributeModifier(Attribute.GENERIC_ARMOR, modifier)
 
-        val leatherMeta = itemMeta as LeatherArmorMeta
         leatherMeta.setColor(Color.fromRGB(220, 186, 100))
 
-        itemMeta.persistentDataContainer[itemIDKey!!, PersistentDataType.STRING] = ITEM_ID
+        leatherMeta.persistentDataContainer[itemIDKey!!, PersistentDataType.STRING] = ITEM_ID
 
         item.itemMeta = leatherMeta
         return item
@@ -56,5 +56,9 @@ object FarmersGoggles {
         recipe.setIngredient('G', Material.GLASS)
         recipe.setIngredient('L', Material.LEATHER)
         Bukkit.addRecipe(recipe)
+    }
+
+    fun removeRecipe() {
+        Bukkit.removeRecipe(farmersGogglesItemKey!!)
     }
 }

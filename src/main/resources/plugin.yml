@@ -1,0 +1,4 @@
+name: Farmageddon
+version: '${project.version}'
+main: ksndq.farmageddon.Farmageddon
+api-version: '1.20'

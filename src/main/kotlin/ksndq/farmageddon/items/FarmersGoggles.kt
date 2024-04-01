@@ -1,12 +1,13 @@
 package ksndq.farmageddon.items
 
-import ksndq.farmageddon.Farmageddon.Companion.farmersGogglesItemKey
 import ksndq.farmageddon.Farmageddon.Companion.itemIDKey
+import ksndq.farmageddon.Farmageddon.Companion.plugin
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.format.TextColor
 import org.bukkit.Bukkit
 import org.bukkit.Color
 import org.bukkit.Material
+import org.bukkit.NamespacedKey
 import org.bukkit.attribute.Attribute
 import org.bukkit.attribute.AttributeModifier
 import org.bukkit.inventory.EquipmentSlot
@@ -19,6 +20,7 @@ import java.util.*
 
 object FarmersGoggles {
     private const val ITEM_ID = "FARMERS_GOGGLES"
+    private val NAMESPACEDKEY = NamespacedKey(plugin, "farmers_goggles")
     fun getItem(): ItemStack {
         val item = ItemStack(Material.LEATHER_HELMET)
         val leatherMeta = item.itemMeta as LeatherArmorMeta
@@ -50,7 +52,7 @@ object FarmersGoggles {
     }
 
     fun addRecipe() {
-        val recipe = ShapedRecipe(farmersGogglesItemKey!!, getItem())
+        val recipe = ShapedRecipe(NAMESPACEDKEY, getItem())
         recipe.shape(" S ", "GLG")
         recipe.setIngredient('S', Material.STRING)
         recipe.setIngredient('G', Material.GLASS)
@@ -59,6 +61,6 @@ object FarmersGoggles {
     }
 
     fun removeRecipe() {
-        Bukkit.removeRecipe(farmersGogglesItemKey!!)
+        Bukkit.removeRecipe(NAMESPACEDKEY)
     }
 }

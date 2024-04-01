@@ -27,6 +27,15 @@ object EnchantCommandExecutor : CommandExecutor {
         Material.NETHERITE_AXE
     )
 
+    private val hoe = hashSetOf(
+        Material.WOODEN_HOE,
+        Material.STONE_HOE,
+        Material.GOLDEN_HOE,
+        Material.IRON_HOE,
+        Material.DIAMOND_HOE,
+        Material.NETHERITE_HOE
+    )
+
     private val swords = hashSetOf(
         Material.WOODEN_SWORD,
         Material.STONE_SWORD,
@@ -120,10 +129,19 @@ object EnchantCommandExecutor : CommandExecutor {
                     true
                 }
             }
+
+            EnchantList.REPLENISH, EnchantList.DELICATE -> {
+                if (!hoe.contains(currentItem) && !axes.contains(currentItem)) {
+                    player.sendMessage(ChatColor.GOLD.toString() + ChatColor.BOLD.toString() + "Can only be applied to hoes and axes")
+                    false
+                } else {
+                    true
+                }
+            }
+
             else -> {
                 true
             }
         }
     }
-
 }

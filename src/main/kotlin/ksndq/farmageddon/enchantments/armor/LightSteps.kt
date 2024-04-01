@@ -10,7 +10,7 @@ import org.bukkit.plugin.Plugin
 
 class LightSteps(private val plugin: Plugin) : Listener {
     @EventHandler
-    fun lightSteps(event: PlayerInteractEvent) {
+    fun onPlayerInteract(event: PlayerInteractEvent) {
         if(event.action != Action.PHYSICAL) return
         val block = event.clickedBlock ?: return
         if(block.type != Material.FARMLAND) return

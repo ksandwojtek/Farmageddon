@@ -1,5 +1,7 @@
 package ksndq.farmageddon.enchantments
 
 enum class EnchantList {
-    LIGHTSTEPS
+    LIGHTSTEPS,
+    REPLENISH,
+    DELICATE
 }

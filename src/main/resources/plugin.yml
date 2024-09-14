@@ -1,0 +1,6 @@
+name: Farmageddon
+version: '1.0'
+main: com.ksndq.farmageddon.Farmageddon
+api-version: '1.21'
+authors: [ ksndq ]
+load: STARTUP

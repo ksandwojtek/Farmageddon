@@ -1,0 +1,18 @@
+delicate:
+  enabled: true
+  weight: 5
+  conflicts:
+    - "silk_tough"
+  isTreasue: false
+  isCurse: false
+  isTradeable: true
+  isFromEnchanting: true
+replenish:
+  enabled: true
+  weight: 5
+  conflicts:
+    - ""
+  isTreasure: false
+  isCurse: false
+  isTradeable: true
+  isFromEnchanting: true
